@@ -1,0 +1,22 @@
+<app-nav-bar></app-nav-bar>
+<p-card>
+    <h3>People by Organization</h3>
+    <p-dropdown [options]="organizationList" [(ngModel)]="selectedOrganization" placeholder="Select an Organization" optionLabel="name" [showClear]="true" (onChange)="updateView()"></p-dropdown>
+</p-card>
+
+<p-card *ngIf="displayedPersons">
+    <p-table [value]="displayedPersons.names" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-names>
+            <tr>
+                <td>{{names.firstName}}</td>
+                <td>{{names.lastName}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>

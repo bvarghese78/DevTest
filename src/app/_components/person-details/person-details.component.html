@@ -1,0 +1,123 @@
+<app-nav-bar></app-nav-bar>
+<div class="card">
+    <div class="flex flex-row flex-wrap card-container">
+        <h3>Person Details</h3>
+        <form [formGroup]="detailsForm" (ngSubmit)="onSubmit()">
+            <h5>Search By </h5>
+            <div class="field grid">
+                <label for="organizationId">Organization ID*</label>
+                <div class="col-12">
+                    <input type="text" pInputText formControlName="orgId" />
+                </div>
+            </div>
+            <div class="field grid">
+                <label for="extPersonId">External Person ID</label>
+                <div class="col-12">
+                    <input type="text" pInputText formControlName="extPerson" />
+                </div>
+
+                <div class="field grid">
+                    <label for="Email">Email</label>
+                    <div class="col-12">
+                        <input type="text" pInputText  formControlName="email" />
+                    </div>
+                </div>
+
+                <div class="field grid">
+                    <label for="fName">First Name</label>
+                    <div class="col-12">
+                        <input type="text" pInputText  formControlName="firstName" />
+                    </div>
+                </div>
+
+                <div class="field grid">
+                    <label for="lName">Last Name</label>
+                    <div class="col-12">
+                        <input type="text" pInputText  formControlName="lastName" />
+                    </div>
+                </div>
+
+                <div class="field grid">
+                    <label for="phone">Phone</label>
+                    <div class="col-12">
+                        <input type="text" pInputText  formControlName="phone" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="formgrid grid">
+                <p-button label="Search For Person" type="submit" [disabled]="detailsForm.invalid"></p-button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<p-card *ngIf="showDetailsTable">
+    <p-table [value]="personDetails" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
+              <th>Organization Id</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Date of Birth</th>
+              <th>Gender</th>
+              <th>Address</th>
+              <th>City</th>
+              <th>State</th>
+              <th>Postal Code</th>
+              <th>Email</th>
+              <th>Phone</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-details>
+            <tr>
+                <td>{{details.organizationId}}</td>
+                <td>{{details.firstName}}</td>
+                <td>{{details.lastName}}</td>
+                <td>{{details.dateOfBirth}}</td>
+                <td>{{details.gender}}</td>
+                <td>{{details.address}}</td>
+                <td>{{details.city}}</td>
+                <td>{{details.state}}</td>
+                <td>{{details.postalcode}}</td>
+                <td>
+                    <p-button type="button" (click)="op.toggle($event)" label="View Emails"></p-button>
+                    <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}">
+                        <ng-template pTemplate>
+                            <p-table [value]="details.emails" selectionMode="single" responsiveLayout="scroll">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                       <th>Email</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-email>
+                                    <tr>
+                                        <td>{{email.email}}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </ng-template>
+                    </p-overlayPanel>
+                </td>
+                <td>
+                    <p-button type="button" (click)="op2.toggle($event)" label="View Phone Number"></p-button>
+                    <p-overlayPanel #op2 [showCloseIcon]="true" [style]="{width: '450px'}">
+                        <ng-template pTemplate>
+                            <p-table [value]="details.phones" selectionMode="single" responsiveLayout="scroll">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                       <th>Phone</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-phone>
+                                    <tr>
+                                        <td>{{phone.phoneNumber}}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </ng-template>
+                    </p-overlayPanel>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>

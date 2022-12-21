@@ -1,0 +1,6 @@
+<p-menubar [model]="items">
+
+    <ng-template pTemplate="end" *ngIf="loggedIn()">
+        <a [routerLink]="" queryParamsHandling="preserve" (click)="logOut()">Log Out</a>
+    </ng-template>
+</p-menubar>

@@ -1,0 +1,112 @@
+<app-nav-bar></app-nav-bar>
+<p-card>
+    <h3>Claims</h3>
+    <form [formGroup]="claimsForm" (ngSubmit)="onSubmit()">
+        <h5>Search By </h5>
+        <div class="formgrid grid">
+            <div class="field col">
+                <div class="field-radiobutton">
+                    <p-radioButton name="searchBy" value="0" formControlName="searchBy" (click)="radioButtonClicked()"></p-radioButton>
+                    <label for="searchByPerson">Person ID</label>
+                </div>
+                <div class="field-radiobutton">
+                    <p-radioButton name="searchBy" value="1" formControlName="searchBy" (click)="radioButtonClicked()"></p-radioButton>
+                    <label for="searchByPerson">Ext Person ID</label>
+                </div>
+            </div>
+        </div>
+        <div class="formgrid grid">
+            <div class="field col" *ngIf="claimsForm.get('searchBy')?.value == 0">
+                <label for="personId">Person ID</label>
+                <input type="text" pInputText formControlName="person" />
+            </div>
+
+            <div class="field col" *ngIf="claimsForm.get('searchBy')?.value == 1">
+                <label for="extPersonId">Ext Person ID</label>
+                <input type="number" pInputText  formControlName="extPerson" />
+            </div>
+        </div>
+
+        <div class="formgrid grid">
+            <p-button label="Search Claims" type="submit" [disabled]="claimsForm.invalid"></p-button>
+        </div>
+    </form>
+</p-card>
+
+<!--Names Table-->
+<p-card *ngIf="showNamesTable">
+    <h5>Select the user to view claims</h5>
+    <p-table [value]="namesDto" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-names>
+            <tr>
+                <td>{{names.firstName}}</td>
+                <td>{{names.lastName}}</td>
+                <td><p-button type="button" (click)="getClaims(names.id)" label="View Claims"></p-button></td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+<!--Claims Table-->
+<p-card *ngIf="showClaimsTable">
+    <h3>Showing Claims for {{claimsResponseDto.firstName}} {{claimsResponseDto.lastName}}</h3>
+
+    <p-table [value]="claimsResponseDto.claims" [lazy]="true" (onLazyLoad)="loadClaims($event)" [paginator]="true" [rows]="50"
+    [totalRecords]="claimsResponseDto.totalClaimCount" [loading]="loading" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
+              <th>Id</th>
+              <th>Service Number</th>
+              <th>Service Name</th>
+              <th>Address</th>
+              <th>Service Start Date</th>
+              <th>Service End Date</th>
+              <th>Amount Charged</th>
+              <th>Amount Paid</th>
+              <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-claims>
+            <tr>
+                <td>{{claims.claimId}}</td>
+                <td>{{claims.serviceNumber}}</td>
+                <td>{{claims.serviceName}}</td>
+                <td>{{claims.serviceAddress}}</td>
+                <td>{{claims.serviceStartDate}}</td>
+                <td>{{claims.serviceEndDate}}</td>
+                <td>{{claims.chargedAmount}}</td>
+                <td>{{claims.paidAmount}}</td>
+                <td>
+                    <p-button type="button" (click)="op.toggle($event)" label="View Codes"></p-button>
+                    <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}">
+                        <ng-template pTemplate>
+                            <p-table [value]="claims.codes" selectionMode="single" responsiveLayout="scroll">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                       <th>Code</th>
+                                       <th>Code Type</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-codes>
+                                    <tr>
+                                        <td>{{codes.code}}</td>
+                                        <td>{{codes.codeType}}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </ng-template>
+                    </p-overlayPanel>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+<p-toast></p-toast>
